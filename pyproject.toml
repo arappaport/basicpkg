@@ -1,0 +1,106 @@
+[tool.poetry]
+name = "basicpkg"
+version = "0.1.0"
+description = "A modern Python package demonstrating best practices with Poetry, Click CLI, and Nox."
+# TODO: replace author name and email before publishing
+authors = ["Your Name <you@example.com>"]
+license = "MIT"
+readme = "README.md"
+homepage = "https://github.com/yourorg/basicpkg"
+repository = "https://github.com/yourorg/basicpkg"
+documentation = "https://github.com/yourorg/basicpkg#readme"
+keywords = ["cli", "data", "pandas", "basicpkg"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Environment :: Console",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+]
+packages = [{ include = "basicpkg" }]
+
+# ---------------------------------------------------------------------------
+# Runtime — installed for every consumer of the library.
+# click is intentionally absent: the CLI is a dev convenience, not a library
+# contract. Library consumers must not pay the click import cost.
+# ---------------------------------------------------------------------------
+[tool.poetry.dependencies]
+python = "^3.10"
+pandas = "^2.2"
+
+# ---------------------------------------------------------------------------
+# Dev group — local development, CI, and CLI usage only.
+# ---------------------------------------------------------------------------
+[tool.poetry.group.dev.dependencies]
+click        = "^8.1"
+pytest       = "^8.1"
+pytest-cov   = "^5.0"
+nox          = "^2024.3"
+ruff         = "^0.4"
+mypy         = "^1.10"
+pandas-stubs = "^2.2"
+pre-commit   = "^3.7"
+pip-audit    = "^2.7"
+tomli        = { version = "^2.0", python = "<3.11" }  # tomllib backport for 3.10
+
+# CLI entry point only available after `poetry install --with dev`
+# because click is dev-only. Library users cannot run this command.
+[tool.poetry.scripts]
+basicpkg = "basicpkg.cli:main"
+
+# ---------------------------------------------------------------------------
+# ruff — linting + formatting in one tool.
+# ANN enforces annotation completeness; mypy --strict then validates types.
+# ANN101/102 (self/cls) are noise — mypy handles those via --strict already.
+# ---------------------------------------------------------------------------
+[tool.ruff]
+target-version = "py310"
+line-length    = 88
+
+[tool.ruff.lint]
+select = ["E", "W", "F", "I", "UP", "B", "C4", "ANN"]
+ignore = ["ANN101", "ANN102"]
+
+[tool.ruff.lint.isort]
+known-first-party = ["basicpkg"]
+
+[tool.ruff.lint.per-file-ignores]
+# Fixtures use pytest-injected types; ANN adds no value in test files.
+"tests/*" = ["ANN"]
+
+# ---------------------------------------------------------------------------
+# mypy — strict mode with no escape hatches.
+# pandas-stubs provides the type information mypy needs to resolve pandas APIs.
+# ---------------------------------------------------------------------------
+[tool.mypy]
+python_version         = "3.10"
+strict                 = true
+ignore_missing_imports = false
+
+# ---------------------------------------------------------------------------
+# pytest — 85% branch-coverage floor; --tb=short keeps CI logs scannable.
+# ---------------------------------------------------------------------------
+[tool.pytest.ini_options]
+addopts   = "--cov=basicpkg --cov-report=term-missing --cov-fail-under=85 --tb=short"
+testpaths = ["tests"]
+
+[tool.coverage.run]
+branch = true
+source = ["basicpkg"]
+omit   = ["tests/*", "noxfile.py"]
+
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    "if __name__ == .__main__.:",
+    "raise NotImplementedError",
+]
+
+[build-system]
+requires      = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

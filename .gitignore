@@ -1,0 +1,41 @@
+# Python bytecode
+__pycache__/
+*.py[cod]
+*.so
+
+# Distribution / packaging
+*.egg-info/
+dist/
+build/
+.eggs/
+
+# Virtual environments
+.venv/
+venv/
+ENV/
+
+# Nox session venvs
+.nox/
+
+# pytest / coverage artefacts
+.pytest_cache/
+.coverage
+.coverage.*
+htmlcov/
+coverage.xml
+
+# Type checker cache
+.mypy_cache/
+
+# Linter cache
+.ruff_cache/
+
+# IDE
+.idea/
+.vscode/
+.DS_Store
+*.swp
+
+# NOTE: poetry.lock is intentionally NOT listed here.
+# Commit the lockfile for reproducible installs in CI and contributor onboarding.
+# Library consumers manage their own dependency resolution independently.
