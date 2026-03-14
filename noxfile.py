@@ -16,11 +16,11 @@ from __future__ import annotations
 
 import nox
 
-PYTHON_VERSIONS = ["3.10", "3.11", "3.12"]
+PYTHON_VERSIONS = ["3.10", "3.12", "3.13"]
 
 # Intentionally minimal: fast feedback for the most common Python version.
 # Developers opt into the full matrix with `nox -s tests`.
-nox.options.sessions = ["lint", "typecheck", "tests-3.11"]
+nox.options.sessions = ["lint", "typecheck", "tests-3.13"]
 
 # Mirrors [tool.poetry.dependencies] in pyproject.toml.
 # Kept here as a constant so the safety session and test sessions stay aligned.
@@ -37,7 +37,7 @@ _TEST_DEPS = [
 ]
 
 
-@nox.session(python="3.11", reuse_venv=True)
+@nox.session(python="3.13", reuse_venv=True)
 def lint(session: nox.Session) -> None:
     """Lint and format-check with ruff (read-only; fails on any violation)."""
     session.install("ruff")
@@ -45,7 +45,7 @@ def lint(session: nox.Session) -> None:
     session.run("ruff", "format", "--check", "basicpkg", "tests", "noxfile.py")
 
 
-@nox.session(python="3.11", reuse_venv=True)
+@nox.session(python="3.13", reuse_venv=True)
 def format(session: nox.Session) -> None:
     """Auto-format and fix lint violations in-place with ruff."""
     session.install("ruff")
@@ -53,7 +53,7 @@ def format(session: nox.Session) -> None:
     session.run("ruff", "check", "--fix", "basicpkg", "tests", "noxfile.py")
 
 
-@nox.session(python="3.11", reuse_venv=True)
+@nox.session(python="3.13", reuse_venv=True)
 def typecheck(session: nox.Session) -> None:
     """Run mypy --strict over the package source."""
     session.install("mypy", "pandas-stubs", "click", *_RUNTIME_DEPS)
@@ -66,11 +66,11 @@ def tests(session: nox.Session) -> None:
     session.install(*_TEST_DEPS)
     # Install the package in editable mode so `import basicpkg` resolves correctly.
     session.install("-e", ".", "--no-deps")
-    # Extra args forwarded from CLI: nox -s tests-3.11 -- -k test_stats -v
+    # Extra args forwarded from CLI: nox -s tests-3.13 -- -k test_stats -v
     session.run("pytest", *session.posargs)
 
 
-@nox.session(python="3.11", reuse_venv=False)
+@nox.session(python="3.13", reuse_venv=False)
 def safety(session: nox.Session) -> None:
     """Audit runtime dependencies for known CVEs via pip-audit.
 
@@ -81,9 +81,9 @@ def safety(session: nox.Session) -> None:
     session.run("pip-audit")
 
 
-@nox.session(python="3.11")
+@nox.session(python="3.13")
 def ci(session: nox.Session) -> None:
-    """Composite fast gate: lint + typecheck + tests-3.11.
+    """Composite fast gate: lint + typecheck + tests-3.13.
 
     Intended for PR checks. Full matrix testing runs as a parallel CI job.
     Sessions cannot call each other in Nox, so logic is inlined here.

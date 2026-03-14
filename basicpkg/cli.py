@@ -136,5 +136,6 @@ def pipeline_cmd(csv_file: str, column: str, output: str) -> None:
         )
         click.echo(filtered_df.to_string(index=False))
         click.echo("\nStats on filtered set:")
-        # stats values are dicts of str->float; cast satisfies mypy after isinstance check
+        # stats values are dicts of str->float;
+        # cast satisfies mypy after isinstance check
         _render_stats(stats)  # type: ignore[arg-type]

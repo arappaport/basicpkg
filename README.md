@@ -203,35 +203,35 @@ poetry run pytest --cov-report=html && open htmlcov/index.html
 
 ```bash
 nox -l           # list all available sessions
-nox              # run defaults: lint, typecheck, tests-3.11
+nox              # run defaults: lint, typecheck, tests-3.13
 nox -s <name>    # run one specific session
 ```
 
-| Session | Description |
-|---------|-------------|
-| `lint` | ruff lint + format check (read-only; safe for CI) |
-| `format` | ruff auto-format + fix violations in-place |
-| `typecheck` | mypy `--strict` over `basicpkg/` |
-| `tests-3.10` | pytest + coverage on Python 3.10 |
-| `tests-3.11` | pytest + coverage on Python 3.11 |
-| `tests-3.12` | pytest + coverage on Python 3.12 |
-| `safety` | pip-audit CVE scan on runtime deps only |
-| `ci` | lint + typecheck + tests-3.11 (fast PR gate) |
+| Session      | Description                                       |
+|--------------|---------------------------------------------------|
+| `lint`       | ruff lint + format check (read-only; safe for CI) |
+| `format`     | ruff auto-format + fix violations in-place        |
+| `typecheck`  | mypy `--strict` over `basicpkg/`                  |
+| `tests-3.10` | pytest + coverage on Python 3.10                  |
+| `tests-3.12` | pytest + coverage on Python 3.12                  |
+| `tests-3.13` | pytest + coverage on Python 3.13                  |
+| `safety`     | pip-audit CVE scan on runtime deps only           |
+| `ci`         | lint + typecheck + tests-3.13 (fast PR gate)      |
 
 ### Passing extra arguments to pytest
 
 ```bash
 # Run one test file verbosely
-nox -s tests-3.11 -- tests/test_transform.py -v
+nox -s tests-3.13 -- tests/test_transform.py -v
 
 # Filter by test name
-nox -s tests-3.11 -- -k "zero_variance" -v
+nox -s tests-3.13 -- -k "zero_variance" -v
 ```
 
 ### Full Python version matrix
 
 ```bash
-nox -s tests     # runs 3.10, 3.11, 3.12 sequentially
+nox -s tests     # runs 3.10, 3.12, 3.13 sequentially
 ```
 
 ---

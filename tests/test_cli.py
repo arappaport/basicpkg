@@ -18,8 +18,9 @@ from basicpkg.cli import main
 
 @pytest.fixture()
 def runner() -> CliRunner:
-    """mix_stderr=False keeps stdout and stderr separate for precise assertions."""
-    return CliRunner(mix_stderr=False)
+    """mix_stderr=False keeps stdout and stderr separate for precise assertions.
+    This is the default behavior since version 8 of click"""
+    return CliRunner()
 
 
 class TestMainGroup:

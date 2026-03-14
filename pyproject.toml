@@ -18,8 +18,8 @@ classifiers = [
     "Operating System :: OS Independent",
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3.10",
-    "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
     "Topic :: Software Development :: Libraries :: Python Modules",
 ]
 packages = [{ include = "basicpkg" }]
@@ -38,9 +38,10 @@ pandas = "^2.2"
 # ---------------------------------------------------------------------------
 [tool.poetry.group.dev.dependencies]
 click        = "^8.1"
-pytest       = "^8.1"
+pytest       = "^9"
 pytest-cov   = "^5.0"
-nox          = "^2024.3"
+# moved to globally installed nox.
+#nox          = "^2024.3"
 ruff         = "^0.4"
 mypy         = "^1.10"
 pandas-stubs = "^2.2"
@@ -78,7 +79,7 @@ known-first-party = ["basicpkg"]
 # pandas-stubs provides the type information mypy needs to resolve pandas APIs.
 # ---------------------------------------------------------------------------
 [tool.mypy]
-python_version         = "3.10"
+python_version         = "3.13"
 strict                 = true
 ignore_missing_imports = false
 
