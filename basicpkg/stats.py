@@ -30,12 +30,12 @@ def summary_stats(df: pd.DataFrame, column: str) -> dict[str, float]:
     # Explicit key set gives a stable, versioned schema — df.describe() varies
     # across pandas versions and includes unwanted percentiles by default.
     return {
-        "mean":   float(s.mean()),
+        "mean": float(s.mean()),
         "median": float(s.median()),
-        "std":    float(s.std()),
-        "min":    float(s.min()),
-        "max":    float(s.max()),
-        "count":  float(s.count()),
+        "std": float(s.std()),
+        "min": float(s.min()),
+        "max": float(s.max()),
+        "count": float(s.count()),
     }
 
 

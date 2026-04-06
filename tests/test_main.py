@@ -41,9 +41,7 @@ class TestRunPipeline:
         run_pipeline(sample_df, "value")
         assert sample_df["value"].tolist() == original
 
-    def test_zero_variance_raises_value_error(
-        self, zero_variance_df: pd.DataFrame
-    ) -> None:
+    def test_zero_variance_raises_value_error(self, zero_variance_df: pd.DataFrame) -> None:
         with pytest.raises(ValueError, match="zero variance"):
             run_pipeline(zero_variance_df, "value")
 

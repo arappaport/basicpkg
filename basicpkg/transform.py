@@ -31,10 +31,7 @@ def normalise_column(df: pd.DataFrame, column: str) -> pd.DataFrame:
     # Zero variance would produce NaN silently via 0/0 — fail fast instead
     # so the error surfaces at the call site, not somewhere downstream.
     if col_min == col_max:
-        raise ValueError(
-            f"'{column}' has zero variance (all values == {col_min}); "
-            "min-max normalisation is undefined."
-        )
+        raise ValueError(f"'{column}' has zero variance (all values == {col_min}); min-max normalisation is undefined.")
 
     result = df.copy()
     result[column] = (df[column] - col_min) / (col_max - col_min)

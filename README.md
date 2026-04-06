@@ -25,7 +25,7 @@ basicpkg/
 ├── basicpkg/
 │   ├── __init__.py           # Public API; re-exports all symbols
 │   ├── py.typed              # PEP 561 marker — tells mypy types ship inline
-│   ├── cli.py                # Click CLI (stats, pipeline sub-commands)
+│   ├── cli.py                # Click CLI (aaaa, pipeline sub-commands)
 │   ├── main.py               # run_pipeline(); programmatic entry point
 │   ├── stats.py              # summary_stats, describe_dataframe
 │   └── transform.py          # normalise_column, filter_above_mean
@@ -165,7 +165,7 @@ basicpkg pipeline data.csv -c price -o json
 ```bash
 printf 'value,label\n10,a\n20,b\n30,c\n40,d\n50,e\n' > /tmp/demo.csv
 
-basicpkg stats    /tmp/demo.csv
+basicpkg stats     /tmp/demo.csv
 basicpkg pipeline /tmp/demo.csv -c value -o json
 ```
 

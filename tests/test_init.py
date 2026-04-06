@@ -19,9 +19,7 @@ class TestPublicAPI:
 
     def test_all_exports_are_importable(self) -> None:
         for name in basicpkg.__all__:
-            assert hasattr(basicpkg, name), (
-                f"'{name}' is listed in __all__ but is not importable from basicpkg"
-            )
+            assert hasattr(basicpkg, name), f"'{name}' is listed in __all__ but is not importable from basicpkg"
 
     def test_version_is_semver(self) -> None:
         assert re.fullmatch(r"\d+\.\d+\.\d+", basicpkg.__version__), (
@@ -41,6 +39,5 @@ class TestPublicAPI:
 
         toml_version: str = data["tool"]["poetry"]["version"]
         assert basicpkg.__version__ == toml_version, (
-            f"basicpkg.__version__ ({basicpkg.__version__!r}) != "
-            f"pyproject.toml version ({toml_version!r})"
+            f"basicpkg.__version__ ({basicpkg.__version__!r}) != pyproject.toml version ({toml_version!r})"
         )

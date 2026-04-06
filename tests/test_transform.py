@@ -31,18 +31,16 @@ class TestNormaliseColumn:
         pd.testing.assert_series_equal(result["score"], sample_df["score"])
 
     @pytest.mark.parametrize("bad_col", ["nonexistent", "", "VALUE"])
-    def test_missing_column_raises_key_error(
-        self, sample_df: pd.DataFrame, bad_col: str
-    ) -> None:
+    def test_missing_column_raises_key_error(self, sample_df: pd.DataFrame, bad_col: str) -> None:
         with pytest.raises(KeyError):
             normalise_column(sample_df, bad_col)
 
     @pytest.mark.parametrize(
         "values",
         [
-            [5.0, 5.0, 5.0],   # all identical non-zero
-            [0.0],              # single row
-            [1e9, 1e9, 1e9],   # large identical values
+            [5.0, 5.0, 5.0],  # all identical non-zero
+            [0.0],  # single row
+            [1e9, 1e9, 1e9],  # large identical values
         ],
     )
     def test_zero_variance_raises_value_error(self, values: list[float]) -> None:
@@ -73,16 +71,12 @@ class TestFilterAboveMean:
         filter_above_mean(sample_df, "value")
         assert len(sample_df) == original_len
 
-    def test_all_equal_values_returns_empty(
-        self, zero_variance_df: pd.DataFrame
-    ) -> None:
+    def test_all_equal_values_returns_empty(self, zero_variance_df: pd.DataFrame) -> None:
         # Every row equals the mean — nothing is *strictly* above it.
         result = filter_above_mean(zero_variance_df, "value")
         assert len(result) == 0
 
     @pytest.mark.parametrize("bad_col", ["nonexistent", "SCORE"])
-    def test_missing_column_raises_key_error(
-        self, sample_df: pd.DataFrame, bad_col: str
-    ) -> None:
+    def test_missing_column_raises_key_error(self, sample_df: pd.DataFrame, bad_col: str) -> None:
         with pytest.raises(KeyError):
             filter_above_mean(sample_df, bad_col)

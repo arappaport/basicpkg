@@ -34,9 +34,7 @@ class TestSummaryStats:
             ("count", 5.0),
         ],
     )
-    def test_known_stat_values(
-        self, sample_df: pd.DataFrame, stat: str, expected: float
-    ) -> None:
+    def test_known_stat_values(self, sample_df: pd.DataFrame, stat: str, expected: float) -> None:
         assert summary_stats(sample_df, "value")[stat] == pytest.approx(expected)
 
     def test_std_uses_ddof1(self, sample_df: pd.DataFrame) -> None:
@@ -52,9 +50,7 @@ class TestSummaryStats:
         assert math.isnan(result["std"])
 
     @pytest.mark.parametrize("bad_col", ["missing", "nonexistent", "VALUE"])
-    def test_missing_column_raises_key_error(
-        self, sample_df: pd.DataFrame, bad_col: str
-    ) -> None:
+    def test_missing_column_raises_key_error(self, sample_df: pd.DataFrame, bad_col: str) -> None:
         with pytest.raises(KeyError):
             summary_stats(sample_df, bad_col)
 

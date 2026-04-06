@@ -42,38 +42,26 @@ class TestMainGroup:
 class TestStatsCommand:
     """stats sub-command: column selection, output formats, error exits."""
 
-    def test_all_numeric_columns_in_pretty_output(
-        self, runner: CliRunner, tmp_csv: str
-    ) -> None:
+    def test_all_numeric_columns_in_pretty_output(self, runner: CliRunner, tmp_csv: str) -> None:
         result = runner.invoke(main, ["stats", tmp_csv], catch_exceptions=False)
         assert result.exit_code == 0
         assert "value" in result.output
         assert "score" in result.output
 
-    def test_single_column_excludes_others(
-        self, runner: CliRunner, tmp_csv: str
-    ) -> None:
-        result = runner.invoke(
-            main, ["stats", tmp_csv, "-c", "value"], catch_exceptions=False
-        )
+    def test_single_column_excludes_others(self, runner: CliRunner, tmp_csv: str) -> None:
+        result = runner.invoke(main, ["stats", tmp_csv, "-c", "value"], catch_exceptions=False)
         assert result.exit_code == 0
         assert "value" in result.output
         assert "score" not in result.output
 
-    def test_json_output_is_valid_and_has_expected_keys(
-        self, runner: CliRunner, tmp_csv: str
-    ) -> None:
-        result = runner.invoke(
-            main, ["stats", tmp_csv, "-o", "json"], catch_exceptions=False
-        )
+    def test_json_output_is_valid_and_has_expected_keys(self, runner: CliRunner, tmp_csv: str) -> None:
+        result = runner.invoke(main, ["stats", tmp_csv, "-o", "json"], catch_exceptions=False)
         assert result.exit_code == 0
         data = json.loads(result.output)
         assert "mean" in data["value"]
 
     @pytest.mark.parametrize("bad_col", ["ghost", "NONEXISTENT", "123"])
-    def test_bad_column_exits_nonzero(
-        self, runner: CliRunner, tmp_csv: str, bad_col: str
-    ) -> None:
+    def test_bad_column_exits_nonzero(self, runner: CliRunner, tmp_csv: str, bad_col: str) -> None:
         result = runner.invoke(main, ["stats", tmp_csv, "-c", bad_col])
         assert result.exit_code != 0
 
@@ -85,20 +73,15 @@ class TestStatsCommand:
 class TestPipelineCommand:
     """pipeline sub-command: output structure, JSON correctness, error exits."""
 
-    def test_pretty_output_contains_row_count(
-        self, runner: CliRunner, tmp_csv: str
-    ) -> None:
-        result = runner.invoke(
-            main, ["pipeline", tmp_csv, "-c", "value"], catch_exceptions=False
-        )
+    def test_pretty_output_contains_row_count(self, runner: CliRunner, tmp_csv: str) -> None:
+        result = runner.invoke(main, ["pipeline", tmp_csv, "-c", "value"], catch_exceptions=False)
         assert result.exit_code == 0
         assert "Filtered rows" in result.output
 
-    def test_json_has_required_top_level_keys(
-        self, runner: CliRunner, tmp_csv: str
-    ) -> None:
+    def test_json_has_required_top_level_keys(self, runner: CliRunner, tmp_csv: str) -> None:
         result = runner.invoke(
-            main, ["pipeline", tmp_csv, "-c", "value", "-o", "json"],
+            main,
+            ["pipeline", tmp_csv, "-c", "value", "-o", "json"],
             catch_exceptions=False,
         )
         assert result.exit_code == 0
@@ -106,27 +89,22 @@ class TestPipelineCommand:
         assert "stats" in data
         assert "filtered_rows" in data
 
-    def test_filtered_row_count_in_json_output(
-        self, runner: CliRunner, tmp_csv: str
-    ) -> None:
+    def test_filtered_row_count_in_json_output(self, runner: CliRunner, tmp_csv: str) -> None:
         result = runner.invoke(
-            main, ["pipeline", tmp_csv, "-c", "value", "-o", "json"],
+            main,
+            ["pipeline", tmp_csv, "-c", "value", "-o", "json"],
             catch_exceptions=False,
         )
         data = json.loads(result.output)
         # Normalised [10..50]: two rows have value > 0.5 (the post-normalisation mean)
         assert len(data["filtered_rows"]) == 2
 
-    def test_missing_column_flag_exits_nonzero(
-        self, runner: CliRunner, tmp_csv: str
-    ) -> None:
+    def test_missing_column_flag_exits_nonzero(self, runner: CliRunner, tmp_csv: str) -> None:
         # --column is required; Click must reject the call before our code runs.
         result = runner.invoke(main, ["pipeline", tmp_csv])
         assert result.exit_code != 0
 
     @pytest.mark.parametrize("bad_col", ["ghost", "label"])
-    def test_bad_column_exits_nonzero(
-        self, runner: CliRunner, tmp_csv: str, bad_col: str
-    ) -> None:
+    def test_bad_column_exits_nonzero(self, runner: CliRunner, tmp_csv: str, bad_col: str) -> None:
         result = runner.invoke(main, ["pipeline", tmp_csv, "-c", bad_col])
         assert result.exit_code != 0
